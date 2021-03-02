@@ -131,7 +131,7 @@ export abstract class OrderedNestDataLoader<ID, Type>
   implements NestDataLoader<ID, Type> {
   protected abstract getOptions: (ctx?: any) => IOrderedNestDataLoaderOptions<ID, Type>;
 
-  public generateDataLoader(cxt) {
+  public generateDataLoader(ctx) {
     return this.createLoader(this.getOptions(ctx));
   }
 
