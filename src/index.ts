@@ -20,7 +20,7 @@ export interface NestDataLoader<ID, Type> {
   /**
    * Should return a new instance of dataloader each time
    */
-  generateDataLoader(): DataLoader<ID, Type>;
+  generateDataLoader(ctx: any): DataLoader<ID, Type>;
 }
 
 /**
@@ -57,7 +57,7 @@ export class DataLoaderInterceptor implements NestInterceptor {
                     ctx[NEST_LOADER_CONTEXT_KEY].contextId,
                     { strict: false }
                   )
-                ).generateDataLoader();
+                ).generateDataLoader(ctx);
               })();
             } catch (e) {
               throw new InternalServerErrorException(
@@ -129,10 +129,10 @@ interface IOrderedNestDataLoaderOptions<ID, Type> {
 // tslint:disable-next-line: max-classes-per-file
 export abstract class OrderedNestDataLoader<ID, Type>
   implements NestDataLoader<ID, Type> {
-  protected abstract getOptions: () => IOrderedNestDataLoaderOptions<ID, Type>;
+  protected abstract getOptions: (ctx?: any) => IOrderedNestDataLoaderOptions<ID, Type>;
 
-  public generateDataLoader() {
-    return this.createLoader(this.getOptions());
+  public generateDataLoader(cxt:any) {
+    return this.createLoader(this.getOptions(ctx));
   }
 
   protected createLoader(
